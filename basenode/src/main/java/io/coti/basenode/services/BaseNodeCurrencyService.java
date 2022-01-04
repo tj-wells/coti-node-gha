@@ -101,7 +101,7 @@ public class BaseNodeCurrencyService implements ICurrencyService {
                     }
                 }
             } catch (HttpClientErrorException | HttpServerErrorException e) {
-                throw new CurrencyException(String.format("Get native currency from restore node error. Recovery node response: %s", new Gson().fromJson(e.getResponseBodyAsString(), Response.class).getMessage()), e);
+                //throw new CurrencyException(String.format("Get native currency from restore node error. Recovery node response: %s", new Gson().fromJson(e.getResponseBodyAsString(), Response.class).getMessage()), e);
             } catch (Exception e) {
                 throw new CurrencyException("Attempted to override existing native currency", e);
             }
@@ -130,6 +130,7 @@ public class BaseNodeCurrencyService implements ICurrencyService {
         if (!currencies.isEmpty()) {
             currencies.forEach(currencyData -> {
                 if (currencyData.getCurrencyTypeData().getCurrencyType().equals(CurrencyType.NATIVE_COIN)) {
+                    // what if there is more then one ? throw exception
                     verifyNativeCurrency(currencyData);
                 }
             });
@@ -151,7 +152,8 @@ public class BaseNodeCurrencyService implements ICurrencyService {
     @Override
     public Hash getNativeCurrencyHash() {
         if (nativeCurrencyData == null) {
-            throw new CurrencyException("Native currency is missing.");
+            return OriginatorCurrencyCrypto.calculateHash("COTI");
+            //throw new CurrencyException("Native currency is missing.");
         }
         return nativeCurrencyData.getHash();
     }

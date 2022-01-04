@@ -81,6 +81,10 @@ public class FeeService {
                         amount = fee;
                     }
                 } else {
+                    if (feeIncluded)
+                    {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(FEE_CANT_BE_INCLUDED, STATUS_ERROR));
+                    }
                     CurrencyData currencyData = currencies.getByHash(fullNodeFeeRequest.getOriginalCurrencyHash());
                     if (currencyData != null && currencyData.getCurrencyTypeData().getCurrencyType() == CurrencyType.REGULAR_CMD_TOKEN) {
                         amount = regularTokenFullnodeFee;
