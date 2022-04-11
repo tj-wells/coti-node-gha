@@ -3,6 +3,7 @@ package io.coti.zerospend.controllers;
 import io.coti.basenode.data.Event;
 import io.coti.basenode.http.interfaces.IResponse;
 import io.coti.zerospend.http.SetIndexesRequest;
+import io.coti.zerospend.services.NetworkService;
 import io.coti.zerospend.services.TransactionCreationService;
 import io.coti.zerospend.services.TransactionService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,8 @@ public class AdminController {
     @Autowired
     private TransactionService transactionService;
     @Autowired
+    private NetworkService networkService;
+    @Autowired
     private TransactionCreationService transactionCreationService;
 
     @PutMapping(path = "/transaction/index")
@@ -29,6 +32,11 @@ public class AdminController {
     public ResponseEntity<IResponse> eventMultiDag() {
         return transactionCreationService.createEventTransaction("Multi DAG", Event.MULTI_DAG
         );
+    }
+
+    @PostMapping(path = "/socket/disconnect")
+    public ResponseEntity<IResponse> socketDisconnectForReceiver() {
+        return networkService.socketDisconnectForReceiver();
     }
 
 }

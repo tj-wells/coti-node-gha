@@ -51,16 +51,10 @@ public class ZeroMQPropagationPublisher implements IPropagationPublisher {
     }
 
     public void init() {
-        zeroMQContext = ZMQ.context(1);
-        propagator = zeroMQContext.socket(SocketType.PUB);
-        monitorSocket = ZeroMQUtils.createAndConnectMonitorSocket(zeroMQContext, propagator);
-        propagator.setHWM(10000);
-        if (!propagator.bind("tcp://*:" + propagationPort)) {
-            throw new ZeroMQPublisherException("ZeroMQ publisher socket bind failed to propagation port " + propagationPort);
-        }
+        zeroMQContext = ZeroMQContext.getZeroMQContext();
+        setPublishMessageThread();
         setMonitorThread();
         setPublishHeartBeatMessageThread();
-        setPublishMessageThread();
     }
 
     @Override
@@ -87,7 +81,7 @@ public class ZeroMQPropagationPublisher implements IPropagationPublisher {
             while (!contextTerminated.get() && !Thread.currentThread().isInterrupted()) {
                 try {
                     String serverAddress = "tcp://" + publisherIp + ":" + propagationPort;
-                    publish(new ZeroMQMessageData(Channel.getChannelString(PublisherHeartBeatData.class, serverAddress), serializer.serialize(new PublisherHeartBeatData(serverAddress))));
+                    publishMessageQueue.add(new ZeroMQMessageData(Channel.getChannelString(PublisherHeartBeatData.class, serverAddress), serializer.serialize(new PublisherHeartBeatData(serverAddress))));
                     Thread.sleep(HEARTBEAT_INTERVAL);
                 } catch (InterruptedException e) {
                     log.info("HeartBeat Publisher thread interrupted");
@@ -108,33 +102,40 @@ public class ZeroMQPropagationPublisher implements IPropagationPublisher {
     public void setPublishMessageThread() {
 
         publishMessageThread = new Thread(() -> {
-            boolean contextTerminated = false;
-            while (!contextTerminated && !Thread.currentThread().isInterrupted()) {
-                try {
-                    ZeroMQMessageData messageData = publishMessageQueue.take();
-                    publish(messageData);
-                } catch (InterruptedException e) {
-                    log.info("Publisher thread interrupted");
-                    Thread.currentThread().interrupt();
-                } catch (ZMQException e) {
-                    if (e.getErrorCode() == ZMQ.Error.ETERM.getCode()) {
-                        log.info("Publisher context is terminated");
-                        contextTerminated = true;
-                    } else {
-                        log.error(ZMQ_PUBLISHER_HANDLER_ERROR, e);
-                    }
-                }
+            propagator = zeroMQContext.socket(SocketType.PUB);
+            propagator.setHWM(10000);
+            if (!propagator.bind("tcp://*:" + propagationPort)) {
+                throw new ZeroMQPublisherException("ZeroMQ publisher socket bind failed to propagation port " + propagationPort);
             }
+            publishMessageData();
             publishRemainingMessages();
+            ZeroMQUtils.closeSocket(propagator);
         }, "PUB");
         publishMessageThread.start();
     }
 
-    private void publish(ZeroMQMessageData messageData) {
-        synchronized (this) {
-            propagator.sendMore(messageData.getChannel().getBytes());
-            propagator.send(messageData.getMessage());
+    private void publishMessageData() {
+        while (!ZeroMQContext.isContextTerminated() && !Thread.currentThread().isInterrupted()) {
+            try {
+                ZeroMQMessageData messageData = publishMessageQueue.take();
+                publish(messageData);
+            } catch (InterruptedException e) {
+                log.info("Publisher thread interrupted");
+                Thread.currentThread().interrupt();
+            } catch (ZMQException e) {
+                if (e.getErrorCode() == ZMQ.Error.ETERM.getCode()) {
+                    log.info("Publisher context is terminated");
+                    ZeroMQContext.setContextTerminated(true);
+                } else {
+                    log.error(ZMQ_PUBLISHER_HANDLER_ERROR, e);
+                }
+            }
         }
+    }
+
+    private void publish(ZeroMQMessageData messageData) {
+        propagator.sendMore(messageData.getChannel().getBytes());
+        propagator.send(messageData.getMessage());
     }
 
     private void publishRemainingMessages() {
@@ -148,13 +149,14 @@ public class ZeroMQPropagationPublisher implements IPropagationPublisher {
 
     private void setMonitorThread() {
         monitorThread = new Thread(() -> {
-            AtomicBoolean contextTerminated = new AtomicBoolean(false);
-            while (!contextTerminated.get() && !Thread.currentThread().isInterrupted()) {
+            ZeroMQUtils.waitForSocketInit();
+            monitorSocket = ZeroMQUtils.createAndConnectMonitorSocket(zeroMQContext, propagator);
+            while (!ZeroMQContext.isContextTerminated() && !Thread.currentThread().isInterrupted()) {
                 try {
-                    ZeroMQUtils.getServerSocketEvent(monitorSocket, SocketType.PUB, monitorInitialized, contextTerminated);
+                    ZeroMQUtils.getServerSocketEvent(monitorSocket, SocketType.PUB, monitorInitialized);
                 } catch (ZMQException e) {
                     if (e.getErrorCode() == ZMQ.Error.ETERM.getCode()) {
-                        contextTerminated.set(true);
+                        ZeroMQContext.setContextTerminated(true);
                     } else {
                         log.error("ZeroMQ exception at monitor publisher thread", e);
                     }
@@ -162,7 +164,7 @@ public class ZeroMQPropagationPublisher implements IPropagationPublisher {
                     log.error("Exception at monitor publisher thread", e);
                 }
             }
-            monitorSocket.close();
+            ZeroMQUtils.closeSocket(monitorSocket);
         }, "MONITOR PUB");
         monitorThread.start();
     }
@@ -179,9 +181,6 @@ public class ZeroMQPropagationPublisher implements IPropagationPublisher {
     public void shutdown() {
         if (propagator != null) {
             log.info("Shutting down {}", this.getClass().getSimpleName());
-            propagator.setLinger(1000);
-            propagator.close();
-            zeroMQContext.term();
             try {
                 publishMessageThread.interrupt();
                 publishMessageThread.join();

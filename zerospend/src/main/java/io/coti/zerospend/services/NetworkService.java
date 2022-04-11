@@ -1,13 +1,19 @@
 package io.coti.zerospend.services;
 
+import io.coti.basenode.communication.interfaces.IReceiver;
 import io.coti.basenode.data.Hash;
 import io.coti.basenode.data.NetworkData;
 import io.coti.basenode.data.NetworkNodeData;
 import io.coti.basenode.data.NodeType;
 import io.coti.basenode.exceptions.NetworkChangeException;
+import io.coti.basenode.http.Response;
+import io.coti.basenode.http.interfaces.IResponse;
 import io.coti.basenode.services.BaseNodeNetworkService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,6 +23,9 @@ import java.util.Map;
 @Slf4j
 @Service
 public class NetworkService extends BaseNodeNetworkService {
+
+    @Autowired
+    private IReceiver receiver;
 
     @Override
     public void handleNetworkChanges(NetworkData newNetworkData) {
@@ -46,5 +55,10 @@ public class NetworkService extends BaseNodeNetworkService {
     public boolean isNodeConnectedToNetwork(NetworkData newNetworkData) {
         NetworkNodeData zeroSpendServerData = newNetworkData.getSingleNodeNetworkDataMap().get(NodeType.ZeroSpendServer);
         return zeroSpendServerData != null && zeroSpendServerData.equals(networkNodeData);
+    }
+
+    public ResponseEntity<IResponse> socketDisconnectForReceiver() {
+        receiver.disconnect("tcp://*:5001");
+        return ResponseEntity.status(HttpStatus.OK).body(new Response("Socket was terminated"));
     }
 }

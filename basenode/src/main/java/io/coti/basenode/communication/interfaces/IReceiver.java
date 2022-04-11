@@ -18,4 +18,6 @@ public interface IReceiver {
     int getQueueSize();
 
     void shutdown();
+
+    void disconnect(String address);
 }
