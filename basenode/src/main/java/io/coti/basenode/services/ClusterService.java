@@ -244,4 +244,8 @@ public class ClusterService implements IClusterService {
         return SerializationUtils.clone(sourceSetsByTrustScore);
     }
 
+    @Override
+    public ConcurrentHashMap<Hash, TransactionData> getTrustChainConfirmationCluster() {
+        return trustChainConfirmationCluster;
+    }
 }

@@ -355,12 +355,13 @@ public class TransactionService extends BaseNodeTransactionService {
         try {
             List<Hash> transactionHashes = getTransactionsRequest.getTransactionHashes();
             boolean isExtended = getTransactionsRequest.isExtended();
+            boolean includeRuntimeTrustScore = getTransactionsRequest.isIncludeRuntimeTrustScore();
             PrintWriter output = response.getWriter();
             chunkService.startOfChunk(output);
             AtomicBoolean firstTransactionSent = new AtomicBoolean(false);
 
             transactionHashes.forEach(transactionHash ->
-                    sendTransactionResponse(transactionHash, firstTransactionSent, output, isExtended)
+                    sendTransactionResponse(transactionHash, firstTransactionSent, output, isExtended, includeRuntimeTrustScore)
             );
 
             chunkService.endOfChunk(output);
@@ -412,7 +413,7 @@ public class TransactionService extends BaseNodeTransactionService {
                 AddressTransactionsHistory addressTransactionsHistory = addressTransactionHistories.getByHash(addressHash);
                 if (addressTransactionsHistory != null) {
                     addressTransactionsHistory.getTransactionsHistory().forEach(transactionHash ->
-                            sendTransactionResponse(transactionHash, firstTransactionSent, output, addressHash, reduced, extended)
+                            sendTransactionResponse(transactionHash, firstTransactionSent, output, addressHash, reduced, extended, false)
                     );
                 }
             });
@@ -482,7 +483,7 @@ public class TransactionService extends BaseNodeTransactionService {
         for (Set<Hash> transactionHashSet : transactionsHistoryByAttachmentSubMap.values()) {
             boolean maxLimitReached = false;
             for (Hash transactionHash : transactionHashSet) {
-                sendTransactionResponse(transactionHash, firstTransactionSent, output, addressHash, reduced, false);
+                sendTransactionResponse(transactionHash, firstTransactionSent, output, addressHash, reduced, false, false);
                 sentTxNumber++;
                 if (limit != null && sentTxNumber == limit) {
                     maxLimitReached = true;

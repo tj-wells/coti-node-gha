@@ -97,7 +97,7 @@ public class BaseNodeTransactionService implements ITransactionService {
             isChunkStarted = true;
             long limit = (endingIndex == -1) ? transactionIndexService.getLastTransactionIndexData().getIndex() : endingIndex;
             for (long i = startingIndex; i <= limit; i++) {
-                sendTransactionResponse(transactionIndexes.getByHash(new Hash(i)).getTransactionHash(), firstTransactionSent, output, isExtended);
+                sendTransactionResponse(transactionIndexes.getByHash(new Hash(i)).getTransactionHash(), firstTransactionSent, output, isExtended, false);
             }
             chunkService.endOfChunk(output);
 
@@ -232,7 +232,7 @@ public class BaseNodeTransactionService implements ITransactionService {
             AtomicBoolean firstTransactionSent = new AtomicBoolean(false);
 
             noneIndexedTransactionHashes.forEach(transactionHash ->
-                    sendTransactionResponse(transactionHash, firstTransactionSent, output, isExtended)
+                    sendTransactionResponse(transactionHash, firstTransactionSent, output, isExtended, false)
             );
             chunkService.endOfChunk(output);
         } catch (Exception e) {
@@ -434,14 +434,18 @@ public class BaseNodeTransactionService implements ITransactionService {
     }
 
     protected void sendTransactionResponse(Hash transactionHash, AtomicBoolean firstTransactionSent, PrintWriter
-            output, boolean isExtended) {
-        sendTransactionResponse(transactionHash, firstTransactionSent, output, null, false, isExtended);
+            output, boolean isExtended, boolean isIncludeRuntimeTrustScore) {
+        sendTransactionResponse(transactionHash, firstTransactionSent, output, null, false, isExtended, isIncludeRuntimeTrustScore);
     }
 
     protected void sendTransactionResponse(Hash transactionHash, AtomicBoolean firstTransactionSent, PrintWriter
-            output, Hash addressHash, boolean reduced, boolean extended) {
+            output, Hash addressHash, boolean reduced, boolean extended, boolean includeRuntimeTrustScore) {
         try {
             TransactionData transactionData = transactions.getByHash(transactionHash);
+            if (includeRuntimeTrustScore && clusterService.getTrustChainConfirmationCluster().containsKey(transactionHash)) {
+                double ts = clusterService.getTrustChainConfirmationCluster().get(transactionHash).getTrustChainTrustScore();
+                transactionData.setTrustChainTrustScore(ts);
+            }
             if (transactionData != null) {
                 ITransactionResponseData transactionResponseData;
                 if (reduced) {
