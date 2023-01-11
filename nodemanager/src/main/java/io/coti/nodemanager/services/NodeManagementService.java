@@ -588,7 +588,10 @@ public class NodeManagementService implements INodeManagementService {
         SingleNodeDetailsForWallet singleNodeDetailsForWallet = new SingleNodeDetailsForWallet(node.getHash(), node.getHttpFullAddress(), node.getWebServerUrl(), node.getVersion());
         if (NodeType.FullNode.equals(node.getNodeType())) {
             singleNodeDetailsForWallet.setFeeData(node.getFeeData());
+            singleNodeDetailsForWallet.setRegularTokenFullNodeFee(node.getRegularTokenFullNodeFee());
             singleNodeDetailsForWallet.setTrustScore(node.getTrustScore());
+        } else if (NodeType.TrustScoreNode.equals(node.getNodeType())) {
+            singleNodeDetailsForWallet.setRegularTokenNetworkFee(node.getRegularTokenNetworkFee());
         }
         return singleNodeDetailsForWallet;
     }

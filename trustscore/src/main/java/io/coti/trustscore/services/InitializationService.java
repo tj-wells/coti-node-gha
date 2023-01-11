@@ -16,6 +16,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -28,6 +29,8 @@ public class InitializationService extends BaseNodeInitializationService {
     private String serverPort;
     @Value("${server.url}")
     private String webServerUrl;
+    @Value("${regular.token.network.fee}")
+    private BigDecimal regularTokenNetworkFee;
     private final EnumMap<NodeType, List<Class<? extends IPropagatable>>> publisherNodeTypeToMessageTypesMap = new EnumMap<>(NodeType.class);
 
     @PostConstruct
@@ -72,6 +75,7 @@ public class InitializationService extends BaseNodeInitializationService {
     protected NetworkNodeData createNodeProperties() {
         NetworkNodeData networkNodeData = new NetworkNodeData(NodeType.TrustScoreNode, version, nodeIp, serverPort, NodeCryptoHelper.getNodeHash(), networkType);
         networkNodeData.setWebServerUrl(webServerUrl);
+        networkNodeData.setRegularTokenNetworkFee(regularTokenNetworkFee);
         return networkNodeData;
 
     }

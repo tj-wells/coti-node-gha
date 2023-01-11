@@ -6,6 +6,7 @@ import io.coti.basenode.data.Hash;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Data
 public class SingleNodeDetailsForWallet implements Serializable {
@@ -16,6 +17,10 @@ public class SingleNodeDetailsForWallet implements Serializable {
     private String version;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private FeeData feeData;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private BigDecimal regularTokenFullNodeFee;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private BigDecimal regularTokenNetworkFee;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Double trustScore;
 
