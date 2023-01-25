@@ -1,10 +1,10 @@
-package io.coti.trustscore.data.Buckets;
+package io.coti.trustscore.data.buckets;
 
 import io.coti.basenode.data.interfaces.IEntity;
-import io.coti.trustscore.data.Enums.BehaviorEventsScoreType;
-import io.coti.trustscore.data.Enums.EventType;
-import io.coti.trustscore.data.Events.BehaviorEventsData;
-import io.coti.trustscore.data.Events.EventCountAndContributionData;
+import io.coti.trustscore.data.enums.BehaviorEventsScoreType;
+import io.coti.trustscore.data.enums.EventType;
+import io.coti.trustscore.data.events.BehaviorEventsData;
+import io.coti.trustscore.data.events.EventCountAndContributionData;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

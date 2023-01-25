@@ -1,7 +1,7 @@
 package io.coti.trustscore.services.calculationservices;
 
 import io.coti.trustscore.config.rules.EventScore;
-import io.coti.trustscore.data.Events.BalanceCountAndContribution;
+import io.coti.trustscore.data.events.BalanceCountAndContribution;
 import io.coti.trustscore.utils.DatesCalculation;
 import org.apache.commons.lang3.tuple.MutablePair;
 

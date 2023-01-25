@@ -1,10 +1,10 @@
 package io.coti.trustscore.http.data;
 
 import io.coti.basenode.http.data.interfaces.IResponseData;
-import io.coti.trustscore.data.Buckets.BucketEventData;
-import io.coti.trustscore.data.Enums.EventType;
-import io.coti.trustscore.data.Enums.UserType;
-import io.coti.trustscore.data.Events.EventData;
+import io.coti.trustscore.data.buckets.BucketEventData;
+import io.coti.trustscore.data.enums.EventType;
+import io.coti.trustscore.data.enums.UserType;
+import io.coti.trustscore.data.events.EventData;
 import lombok.Data;
 
 import java.util.Date;
@@ -18,6 +18,7 @@ public class BucketEventResponseData<T extends EventData> implements IResponseDa
     private String bucketHash;
     private Date startPeriodTime;
     private double calculatedDelta;
+    @SuppressWarnings("java:S1948")
     private Map<String, T> eventDataHashToEventDataMap;
     private Date lastUpdate;
     private EventType eventType;

@@ -3,9 +3,9 @@ package io.coti.trustscore.services.calculationservices;
 import io.coti.trustscore.config.rules.BehaviorHighFrequencyEventsScore;
 import io.coti.trustscore.config.rules.HighFrequencyEventScore;
 import io.coti.trustscore.config.rules.RulesData;
-import io.coti.trustscore.data.Buckets.BucketChargeBackEventsData;
-import io.coti.trustscore.data.Enums.HighFrequencyEventScoreType;
-import io.coti.trustscore.data.Enums.UserType;
+import io.coti.trustscore.data.buckets.BucketChargeBackEventsData;
+import io.coti.trustscore.data.enums.HighFrequencyEventScoreType;
+import io.coti.trustscore.data.enums.UserType;
 import io.coti.trustscore.utils.DatesCalculation;
 import lombok.extern.slf4j.Slf4j;
 

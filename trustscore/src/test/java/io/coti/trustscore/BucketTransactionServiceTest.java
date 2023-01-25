@@ -4,10 +4,10 @@ import io.coti.basenode.data.Hash;
 import io.coti.basenode.data.TransactionData;
 import io.coti.basenode.data.TransactionType;
 import io.coti.basenode.database.BaseNodeRocksDBConnector;
-import io.coti.trustscore.data.Buckets.BucketTransactionEventsData;
-import io.coti.trustscore.data.Enums.UserType;
-import io.coti.trustscore.data.Events.BalanceCountAndContribution;
-import io.coti.trustscore.data.Events.TransactionEventData;
+import io.coti.trustscore.data.buckets.BucketTransactionEventsData;
+import io.coti.trustscore.data.enums.UserType;
+import io.coti.trustscore.data.events.BalanceCountAndContribution;
+import io.coti.trustscore.data.events.TransactionEventData;
 import io.coti.trustscore.model.BucketTransactionEvents;
 import io.coti.trustscore.services.BucketTransactionService;
 import io.coti.trustscore.services.calculationservices.BucketTransactionsCalculator;
@@ -106,7 +106,7 @@ public class BucketTransactionServiceTest {
     }
 
     @Test
-    public void addEventToCalculationsTest() {
+    void addEventToCalculationsTest() {
         Assertions.assertTrue(
                 (ifTwoNumbersAreEqualOrAlmostEqual(bucketTransactionEventsDataForWallet.getCurrentMonthDayToBalanceCountAndContribution()
                         .get(setDateOnBeginningOfDay(decreaseTodayDateByDays(0))).getContribution(), 0.03568973444951873))
@@ -116,41 +116,41 @@ public class BucketTransactionServiceTest {
     }
 
     @Test
-    public void getBucketSumScoreTest() {
+    void getBucketSumScoreTest() {
         double bucketSumScore = bucketTransactionService.getBucketSumScore(bucketTransactionEventsDataForWallet);
         Assertions.assertTrue(isTrustScoreValueValid(bucketSumScore));
     }
 
     @Test
-    public void bucketTransactionServiceSimulationOfZeroDayDecayedTest() {
+    void bucketTransactionServiceSimulationOfZeroDayDecayedTest() {
         decayDailyEventsDataForWallet(0);
         double bucketSumScore = bucketTransactionService.getBucketSumScore(bucketTransactionEventsDataForWallet);
         Assertions.assertTrue(isTrustScoreValueValid(bucketSumScore));
     }
 
     @Test
-    public void bucketTransactionServiceSimulationOfDayDecayedTest() {
+    void bucketTransactionServiceSimulationOfDayDecayedTest() {
         decayDailyEventsDataForWallet(1);
         double bucketSumScore = bucketTransactionService.getBucketSumScore(bucketTransactionEventsDataForWallet);
         Assertions.assertTrue(isTrustScoreValueValid(bucketSumScore));
     }
 
     @Test
-    public void bucketTransactionServiceSimulationOfTwoDayDecayedTest() {
+    void bucketTransactionServiceSimulationOfTwoDayDecayedTest() {
         decayDailyEventsDataForWallet(2);
         double bucketSumScore = bucketTransactionService.getBucketSumScore(bucketTransactionEventsDataForWallet);
         Assertions.assertTrue(isTrustScoreValueValid(bucketSumScore));
     }
 
     @Test
-    public void bucketTransactionServiceSimulationOfThreeDayDecayed() {
+    void bucketTransactionServiceSimulationOfThreeDayDecayed() {
         decayDailyEventsDataForWallet(3);
         double bucketSumScore = bucketTransactionService.getBucketSumScore(bucketTransactionEventsDataForWallet);
         Assertions.assertTrue(isTrustScoreValueValid(bucketSumScore));
     }
 
     @Test
-    public void bucketTransactionServiceSimulationOfThreeDayDecayedAndAddingNewTransactionTest() {
+    void bucketTransactionServiceSimulationOfThreeDayDecayedAndAddingNewTransactionTest() {
         decayDailyEventsDataForWallet(3);
 
         TransactionData transactionData =
@@ -165,7 +165,7 @@ public class BucketTransactionServiceTest {
     }
 
     @Test
-    public void bucketTransactionServiceComplicatedScenarioTest() {
+    void bucketTransactionServiceComplicatedScenarioTest() {
         // Decay 3 days, and adding transaction of 7 coti
         decayDailyEventsDataForWallet(3);
         TransactionData transactionData =
@@ -202,7 +202,7 @@ public class BucketTransactionServiceTest {
     }
 
     @Test
-    public void bucketTransactionEventsDataForNodeTest() {
+    void bucketTransactionEventsDataForNodeTest() {
         decayDailyEventsDataForNode(3);
 
         TransactionData transactionData =

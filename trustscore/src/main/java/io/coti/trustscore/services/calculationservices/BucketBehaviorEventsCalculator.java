@@ -3,10 +3,10 @@ package io.coti.trustscore.services.calculationservices;
 import io.coti.trustscore.config.rules.BehaviorEventsScore;
 import io.coti.trustscore.config.rules.RulesData;
 import io.coti.trustscore.config.rules.SuspiciousEventScore;
-import io.coti.trustscore.data.Buckets.BucketBehaviorEventsData;
-import io.coti.trustscore.data.Enums.BehaviorEventsScoreType;
-import io.coti.trustscore.data.Enums.UserType;
-import io.coti.trustscore.data.Events.EventCountAndContributionData;
+import io.coti.trustscore.data.buckets.BucketBehaviorEventsData;
+import io.coti.trustscore.data.enums.BehaviorEventsScoreType;
+import io.coti.trustscore.data.enums.UserType;
+import io.coti.trustscore.data.events.EventCountAndContributionData;
 import io.coti.trustscore.utils.DatesCalculation;
 import org.apache.commons.lang3.tuple.MutablePair;
 

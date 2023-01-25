@@ -7,8 +7,6 @@ import io.coti.storagenode.database.interfaces.IDbConnectorService;
 import io.coti.storagenode.exceptions.DbConnectorException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
-import org.elasticsearch.action.admin.cluster.health.ClusterHealthRequest;
-import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 import org.elasticsearch.action.admin.cluster.settings.ClusterGetSettingsRequest;
 import org.elasticsearch.action.admin.cluster.settings.ClusterGetSettingsResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -18,7 +16,6 @@ import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.*;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.action.main.MainResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -32,7 +29,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -106,22 +102,8 @@ public class DbConnectorService implements IDbConnectorService {
 
     @Override
     public ClusterGetSettingsResponse getClusterDetails(Set<String> indexes) throws IOException {
-        MainResponse mainResponse = restClient.info(RequestOptions.DEFAULT);
-
-        for (String index : indexes) {
-            String searchShardsDetails = getSearchShardsDetails(index);
-            ClusterHealthRequest clusterHealthRequest = new ClusterHealthRequest(index);
-            ClusterHealthResponse response = restClient.cluster().health(clusterHealthRequest, RequestOptions.DEFAULT);
-        }
-
         ClusterGetSettingsRequest clusterGetSettingsRequest = new ClusterGetSettingsRequest();
         return restClient.cluster().getSettings(clusterGetSettingsRequest, RequestOptions.DEFAULT);
-    }
-
-    private String getSearchShardsDetails(String index) {
-        final String uri = "http://" + elasticsearchHostIp + ":" + elasticsearchHostPort1 + "/" + index + "/" + "_search_shards";
-        RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(uri, String.class);
     }
 
 
@@ -257,7 +239,6 @@ public class DbConnectorService implements IDbConnectorService {
             buildObjectName(objectName, builder);
             builder.endObject();
             PutMappingRequest request = new PutMappingRequest(index);
-//        request.type(INDEX_TYPE);
             request.source(builder);
             if (fromColdStorage) {
                 restColdStorageClient.indices().putMapping(request, RequestOptions.DEFAULT);
@@ -270,15 +251,13 @@ public class DbConnectorService implements IDbConnectorService {
     }
 
     private void buildObjectName(String objectName, XContentBuilder builder) throws IOException {
-        builder.startObject("properties");
-        {
-            builder.startObject(objectName);
-            {
-                builder.field("type", "text");
-            }
-            builder.endObject();
-        }
-        builder.endObject();
+        builder.startObject()
+                .startObject("properties")
+                .startObject(objectName)
+                .field("type", "text")
+                .endObject()
+                .endObject()
+                .endObject();
     }
 
 

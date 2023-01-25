@@ -1,10 +1,10 @@
 package io.coti.trustscore.services;
 
 import io.coti.trustscore.config.rules.RulesData;
-import io.coti.trustscore.data.Buckets.BucketTransactionEventsData;
-import io.coti.trustscore.data.Enums.EventType;
-import io.coti.trustscore.data.Events.BalanceCountAndContribution;
-import io.coti.trustscore.data.Events.TransactionEventData;
+import io.coti.trustscore.data.buckets.BucketTransactionEventsData;
+import io.coti.trustscore.data.enums.EventType;
+import io.coti.trustscore.data.events.BalanceCountAndContribution;
+import io.coti.trustscore.data.events.TransactionEventData;
 import io.coti.trustscore.services.calculationservices.BucketTransactionsCalculator;
 import io.coti.trustscore.services.interfaces.IBucketEventService;
 import io.coti.trustscore.utils.DatesCalculation;

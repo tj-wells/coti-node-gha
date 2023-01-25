@@ -7,7 +7,7 @@ import io.coti.basenode.exceptions.TransactionValidationException;
 import io.coti.basenode.http.Response;
 import io.coti.basenode.http.interfaces.IResponse;
 import io.coti.trustscore.config.rules.UserNetworkFeeByTrustScoreRange;
-import io.coti.trustscore.data.Enums.TrustScoreRangeType;
+import io.coti.trustscore.data.enums.TrustScoreRangeType;
 import io.coti.trustscore.data.TrustScoreData;
 import io.coti.trustscore.http.NetworkFeeRequest;
 import io.coti.trustscore.http.NetworkFeeResponse;
@@ -49,15 +49,7 @@ public class NetworkFeeService {
             validateFullNodeFeeData(fullNodeFeeData, feeIncluded);
 
             BigDecimal originalAmount = fullNodeFeeData.getOriginalAmount();
-            BigDecimal reducedAmount = null;
-
-            if (feeIncluded) {
-                reducedAmount = originalAmount.subtract(fullNodeFeeData.getAmount());
-
-                if (reducedAmount.scale() > 0) {
-                    reducedAmount = reducedAmount.stripTrailingZeros();
-                }
-            }
+            BigDecimal reducedAmount = calculateReducedAmount(fullNodeFeeData, feeIncluded, originalAmount);
 
             BigDecimal fee;
             if (currencyService.isNativeCurrency(fullNodeFeeData.getOriginalCurrencyHash())) {
@@ -98,6 +90,19 @@ public class NetworkFeeService {
             log.error("{}: {}", e.getClass().getName(), e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(e.getMessage(), STATUS_ERROR));
         }
+    }
+
+    private BigDecimal calculateReducedAmount(FullNodeFeeData fullNodeFeeData, boolean feeIncluded, BigDecimal originalAmount) {
+        BigDecimal reducedAmount = null;
+
+        if (feeIncluded) {
+            reducedAmount = originalAmount.subtract(fullNodeFeeData.getAmount());
+
+            if (reducedAmount.scale() > 0) {
+                reducedAmount = reducedAmount.stripTrailingZeros();
+            }
+        }
+        return reducedAmount;
     }
 
     public ResponseEntity<IResponse> validateNetworkFee(NetworkFeeValidateRequest networkFeeValidateRequest) {

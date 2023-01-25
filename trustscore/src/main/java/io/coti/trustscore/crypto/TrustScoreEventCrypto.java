@@ -2,7 +2,7 @@ package io.coti.trustscore.crypto;
 
 import io.coti.basenode.crypto.CryptoHelper;
 import io.coti.basenode.crypto.SignatureValidationCrypto;
-import io.coti.trustscore.data.Events.KycEventData;
+import io.coti.trustscore.data.events.KycEventData;
 import org.springframework.stereotype.Service;
 
 import java.nio.ByteBuffer;

@@ -1,13 +1,14 @@
-package io.coti.trustscore.data.Buckets;
+package io.coti.trustscore.data.buckets;
 
 import io.coti.basenode.data.Hash;
 import io.coti.basenode.data.interfaces.IEntity;
-import io.coti.trustscore.data.Enums.EventType;
-import io.coti.trustscore.data.Enums.UserType;
-import io.coti.trustscore.data.Events.EventData;
+import io.coti.trustscore.data.enums.EventType;
+import io.coti.trustscore.data.enums.UserType;
+import io.coti.trustscore.data.events.EventData;
 import io.coti.trustscore.utils.DatesCalculation;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +21,7 @@ public abstract class BucketEventData<T extends EventData> implements IEntity {
     private Hash bucketHash;
     private Date startPeriodTime;
     private double calculatedDelta;
+    @SuppressWarnings("java:S1948")
     private Map<Hash, T> eventDataHashToEventDataMap;
     private Date lastUpdate;
     private EventType eventType;

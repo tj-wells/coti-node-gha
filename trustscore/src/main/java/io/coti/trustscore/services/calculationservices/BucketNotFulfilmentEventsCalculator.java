@@ -4,10 +4,10 @@ import io.coti.basenode.data.Hash;
 import io.coti.trustscore.config.rules.CompensableEventScore;
 import io.coti.trustscore.config.rules.CompensableEventsScore;
 import io.coti.trustscore.config.rules.RulesData;
-import io.coti.trustscore.data.Buckets.BucketNotFulfilmentEventsData;
-import io.coti.trustscore.data.Enums.CompensableEventScoreType;
-import io.coti.trustscore.data.Enums.UserType;
-import io.coti.trustscore.data.Events.NotFulfilmentToClientContributionData;
+import io.coti.trustscore.data.buckets.BucketNotFulfilmentEventsData;
+import io.coti.trustscore.data.enums.CompensableEventScoreType;
+import io.coti.trustscore.data.enums.UserType;
+import io.coti.trustscore.data.events.NotFulfilmentToClientContributionData;
 import org.apache.commons.lang3.tuple.MutablePair;
 
 import java.util.Map;

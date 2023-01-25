@@ -3,10 +3,10 @@ package io.coti.trustscore.utils;
 import io.coti.basenode.data.Hash;
 import io.coti.basenode.data.SignatureData;
 import io.coti.basenode.data.TransactionData;
-import io.coti.trustscore.data.Buckets.*;
-import io.coti.trustscore.data.Enums.EventType;
-import io.coti.trustscore.data.Enums.UserType;
-import io.coti.trustscore.data.Events.EventData;
+import io.coti.trustscore.data.buckets.*;
+import io.coti.trustscore.data.enums.EventType;
+import io.coti.trustscore.data.enums.UserType;
+import io.coti.trustscore.data.events.EventData;
 import io.coti.trustscore.exceptions.BucketBuilderException;
 import io.coti.trustscore.http.InsertEventRequest;
 

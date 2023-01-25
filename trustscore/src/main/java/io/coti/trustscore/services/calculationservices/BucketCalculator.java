@@ -1,7 +1,7 @@
 package io.coti.trustscore.services.calculationservices;
 
 
-import io.coti.trustscore.data.Buckets.BucketEventData;
+import io.coti.trustscore.data.buckets.BucketEventData;
 import io.coti.trustscore.utils.DatesCalculation;
 import lombok.extern.slf4j.Slf4j;
 

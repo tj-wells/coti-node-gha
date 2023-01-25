@@ -6,7 +6,7 @@ import io.coti.basenode.data.*;
 import io.coti.basenode.exceptions.RollingReserveException;
 import io.coti.basenode.http.*;
 import io.coti.basenode.http.interfaces.IResponse;
-import io.coti.trustscore.data.Enums.UserType;
+import io.coti.trustscore.data.enums.UserType;
 import io.coti.trustscore.data.TrustScoreData;
 import io.coti.trustscore.http.RollingReserveRequest;
 import io.coti.trustscore.http.RollingReserveResponse;

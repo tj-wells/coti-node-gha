@@ -3,10 +3,10 @@ package io.coti.trustscore.services.calculationservices;
 import io.coti.trustscore.config.rules.InitialTrustScoreEventScore;
 import io.coti.trustscore.config.rules.InitialTrustScoreEventsScore;
 import io.coti.trustscore.config.rules.RulesData;
-import io.coti.trustscore.data.Buckets.BucketInitialTrustScoreEventsData;
-import io.coti.trustscore.data.Enums.InitialTrustScoreType;
-import io.coti.trustscore.data.Enums.UserType;
-import io.coti.trustscore.data.Events.InitialTrustScoreData;
+import io.coti.trustscore.data.buckets.BucketInitialTrustScoreEventsData;
+import io.coti.trustscore.data.enums.InitialTrustScoreType;
+import io.coti.trustscore.data.enums.UserType;
+import io.coti.trustscore.data.events.InitialTrustScoreData;
 
 import java.util.Map;
 import java.util.stream.Collectors;

@@ -1,11 +1,11 @@
 package io.coti.trustscore.services;
 
 import io.coti.basenode.database.BaseNodeRocksDBConnector;
-import io.coti.trustscore.data.Buckets.BucketNotFulfilmentEventsData;
-import io.coti.trustscore.data.Enums.CompensableEventScoreType;
-import io.coti.trustscore.data.Enums.EventType;
-import io.coti.trustscore.data.Enums.UserType;
-import io.coti.trustscore.data.Events.NotFulfilmentEventsData;
+import io.coti.trustscore.data.buckets.BucketNotFulfilmentEventsData;
+import io.coti.trustscore.data.enums.CompensableEventScoreType;
+import io.coti.trustscore.data.enums.EventType;
+import io.coti.trustscore.data.enums.UserType;
+import io.coti.trustscore.data.events.NotFulfilmentEventsData;
 import io.coti.trustscore.http.InsertEventRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +26,7 @@ import static io.coti.trustscore.testutils.GeneralUtilsFunctions.generateRandomH
 @ContextConfiguration(classes = {BucketNotFulfilmentEventsService.class,
         BaseNodeRocksDBConnector.class
 })
-public class BucketNotFulfilmentEventsServiceTest {
+class BucketNotFulfilmentEventsServiceTest {
 
     @Autowired
     private BucketNotFulfilmentEventsService bucketNotFulfilmentEventsService;
@@ -41,7 +41,7 @@ public class BucketNotFulfilmentEventsServiceTest {
     }
 
     @Test
-    public void addEventToCalculations() {
+    void addEventToCalculations() {
         NotFulfilmentEventsData notFulfilmentEventsData
                 = new NotFulfilmentEventsData(buildBehaviorEventsDataRequest(CompensableEventScoreType.NON_FULFILMENT));
         bucketNotFulfilmentEventsService.addEventToCalculations(notFulfilmentEventsData, bucketNotFulfilmentEventsData);
@@ -50,7 +50,7 @@ public class BucketNotFulfilmentEventsServiceTest {
     }
 
     @Test
-    public void getBucketEventType() {
+    void getBucketEventType() {
         EventType eventType = bucketNotFulfilmentEventsService.getBucketEventType();
         Assertions.assertEquals(EventType.NOT_FULFILMENT_EVENT, eventType);
     }

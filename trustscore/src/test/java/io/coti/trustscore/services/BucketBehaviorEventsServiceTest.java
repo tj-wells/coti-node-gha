@@ -1,11 +1,11 @@
 package io.coti.trustscore.services;
 
 import io.coti.basenode.database.BaseNodeRocksDBConnector;
-import io.coti.trustscore.data.Buckets.BucketBehaviorEventsData;
-import io.coti.trustscore.data.Enums.BehaviorEventsScoreType;
-import io.coti.trustscore.data.Enums.EventType;
-import io.coti.trustscore.data.Enums.UserType;
-import io.coti.trustscore.data.Events.BehaviorEventsData;
+import io.coti.trustscore.data.buckets.BucketBehaviorEventsData;
+import io.coti.trustscore.data.enums.BehaviorEventsScoreType;
+import io.coti.trustscore.data.enums.EventType;
+import io.coti.trustscore.data.enums.UserType;
+import io.coti.trustscore.data.events.BehaviorEventsData;
 import io.coti.trustscore.http.InsertEventRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +32,7 @@ import static io.coti.trustscore.utils.DatesCalculation.decreaseTodayDateByDays;
 @ContextConfiguration(classes = {BucketBehaviorEventsService.class,
         BaseNodeRocksDBConnector.class
 })
-public class BucketBehaviorEventsServiceTest {
+class BucketBehaviorEventsServiceTest {
 
     @Autowired
     private BucketBehaviorEventsService bucketBehaviorEventsService;
@@ -47,7 +47,7 @@ public class BucketBehaviorEventsServiceTest {
     }
 
     @Test
-    public void bucketBehaviorEventsServiceComplicatedScenarioWithDecayTest() {
+    void bucketBehaviorEventsServiceComplicatedScenarioWithDecayTest() {
         addBehaviorEvents();
         performSimulationOfDecay(3);
         performSimulationOfDecay(2);
@@ -70,7 +70,7 @@ public class BucketBehaviorEventsServiceTest {
     }
 
     @Test
-    public void bucketBehaviorEventsServiceSimpleScenarioTest() {
+    void bucketBehaviorEventsServiceSimpleScenarioTest() {
         addBehaviorEvents();
 
         for (int i = 0; i < 8; i++) {
@@ -85,7 +85,7 @@ public class BucketBehaviorEventsServiceTest {
     }
 
     @Test
-    public void bucketBehaviorEventsServiceWithLargeDecayTest() {
+    void bucketBehaviorEventsServiceWithLargeDecayTest() {
         addBehaviorEvents();
         performSimulationOfDecay(400);
         addBehaviorEvents();

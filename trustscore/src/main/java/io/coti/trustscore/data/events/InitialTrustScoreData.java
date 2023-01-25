@@ -1,6 +1,6 @@
-package io.coti.trustscore.data.Events;
+package io.coti.trustscore.data.events;
 
-import io.coti.trustscore.data.Enums.InitialTrustScoreType;
+import io.coti.trustscore.data.enums.InitialTrustScoreType;
 import lombok.Data;
 
 import java.io.Serializable;

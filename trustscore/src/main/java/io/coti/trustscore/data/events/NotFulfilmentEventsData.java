@@ -1,7 +1,7 @@
-package io.coti.trustscore.data.Events;
+package io.coti.trustscore.data.events;
 
 import io.coti.basenode.data.Hash;
-import io.coti.trustscore.data.Enums.CompensableEventScoreType;
+import io.coti.trustscore.data.enums.CompensableEventScoreType;
 import io.coti.trustscore.http.InsertEventRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

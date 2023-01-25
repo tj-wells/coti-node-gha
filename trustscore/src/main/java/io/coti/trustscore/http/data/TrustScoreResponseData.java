@@ -2,8 +2,8 @@ package io.coti.trustscore.http.data;
 
 import io.coti.basenode.data.SignatureData;
 import io.coti.basenode.http.data.interfaces.IResponseData;
-import io.coti.trustscore.data.Enums.EventType;
-import io.coti.trustscore.data.Enums.UserType;
+import io.coti.trustscore.data.enums.EventType;
+import io.coti.trustscore.data.enums.UserType;
 import io.coti.trustscore.data.TrustScoreData;
 import lombok.Data;
 

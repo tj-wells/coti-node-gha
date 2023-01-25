@@ -1,4 +1,4 @@
-package io.coti.trustscore.data.Events;
+package io.coti.trustscore.data.events;
 
 import lombok.Data;
 

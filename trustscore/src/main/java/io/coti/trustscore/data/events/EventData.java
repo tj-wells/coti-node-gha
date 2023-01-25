@@ -1,11 +1,11 @@
-package io.coti.trustscore.data.Events;
+package io.coti.trustscore.data.events;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.coti.basenode.data.Hash;
 import io.coti.basenode.data.SignatureData;
 import io.coti.basenode.data.interfaces.IEntity;
 import io.coti.basenode.data.interfaces.ISignValidatable;
-import io.coti.trustscore.data.Enums.EventType;
+import io.coti.trustscore.data.enums.EventType;
 import io.coti.trustscore.http.InsertEventRequest;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

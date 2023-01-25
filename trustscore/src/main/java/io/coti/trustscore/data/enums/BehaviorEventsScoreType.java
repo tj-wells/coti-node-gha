@@ -1,4 +1,4 @@
-package io.coti.trustscore.data.Enums;
+package io.coti.trustscore.data.enums;
 
 public enum BehaviorEventsScoreType {
 
