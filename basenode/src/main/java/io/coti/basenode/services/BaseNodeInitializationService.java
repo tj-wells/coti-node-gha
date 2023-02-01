@@ -153,7 +153,6 @@ public abstract class BaseNodeInitializationService {
         networkService.setNodeManagerPropagationAddress("tcp://" + nodeManagerIp + ":" + nodeManagerPropagationPort);
 
         propagationSubscriber.connectAndSubscribeToServer(networkService.getNodeManagerPropagationAddress(), NodeType.NodeManager);
-        propagationSubscriber.startListening();
     }
 
     protected void initDB() {
